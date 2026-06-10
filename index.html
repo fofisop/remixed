@@ -5,7 +5,7 @@
           body {
             background-color: #1e1e24;
             color: #ffffff;
-            padding 50px;
+            padding: 50px;
           }
           input[type="range"] {
     width: 130px;
@@ -14,8 +14,8 @@
           .dek {
             background-color: #2b2b36;
             border: 3px solid #00ffff;
-            border-radius: 12px;
-            padding: 30px;
+            border-radius: 19px;
+            padding: 90px;
             width: 180px;
             text-align: center;
         }
@@ -24,7 +24,7 @@
             font-size: 14px;
         }
         button {
-            width: 30%;
+            width: 50%;
             padding: 20px;
             margin-top: 20px;
             background-color: #00ffff;
@@ -41,7 +41,6 @@
 <body>
     <div class="dek">
         <h2>My dj deck</h2>
-    </div>
       <select id="songSelector">
         <option value="">-- Select a Song --</option>
         <option value="6590745674383360.wav">Track 1</option>
@@ -54,7 +53,7 @@
     <label >Pitch/Speed:</label>
            <input type="range" id="Slide" min="0.5" max="1.5" step="0.1" value="1">
 </div>
-<audio id="audioEngine" crossorigin="anonymous"></audio>
+<audio id="audioEngine" crossorigin="anonymous"loop></audio>
 <div class="slider">
     <label>Volume:</label>
 <input type="range"  id="vol" min="0"max="1"step="0.05" value="0.8">
@@ -69,6 +68,8 @@ min="-20" max="20" step="1" value="0">
     <input type="range" id="t" min="-20" max="20" step="1" value="0">
 </div>
 </div>
+    </div>
+
 <script>
     const selector =document.getElementById('songSelector');
     const audio =document.getElementById('audioEngine');
@@ -84,8 +85,9 @@ let trebleFilter;
 audio.src = selector.value
 audio.load();  playBtn.innerText = "PLAY"; 
 
-
+     
      });
+    
 
 
         playBtn.addEventListener('click', function() {
@@ -93,6 +95,10 @@ audio.load();  playBtn.innerText = "PLAY";
             alert("Pick a track from the menu first!");
             return; 
         } 
+          setupAudioNodes();
+    if (audioContext.state === 'suspended') {
+        audioContext.resume();
+    }
     if (audio.paused){
         audio.play();
          playBtn.innerText = "PAUSE"; 
@@ -114,10 +120,33 @@ function setupAudioNodes() {
     audioContext = new (window.AudioContext || window.webkitAudioContext)();
     const source = audioContext.createMediaElementSource(audio);
 
-    bassFilter = audioContext.createBiquadFilter;
+    bassFilter = audioContext.createBiquadFilter();
         bassFilter.type = 'lowshelf';
     bassFilter.frequency.value = 200; 
+    trebleFilter = audioContext.createBiquadFilter();
+    trebleFilter.type = 'highshelf';
+    trebleFilter.frequency.value = 3000;
+
+    source.connect(bassFilter);
+    bassFilter.connect(trebleFilter);
+    trebleFilter.connect(audioContext.destination);
 };
+volumeSlider.addEventListener('input', function() {
+    audio.volume = volumeSlider.value;
+});
+
+bassSlider.addEventListener('input', function() {
+    if (bassFilter) {
+        bassFilter.gain.value = bassSlider.value;
+
+    }});
+
+    trebleSlider.addEventListener('input', function() {
+    if (trebleFilter) {
+        trebleFilter.gain.value = trebleSlider.value;
+    }
+});
+
 </script>
 </body>
 </html>
