@@ -1,6 +1,42 @@
 <html>
 <head>
     <title>Dj deck</title>
+    <style>
+          body {
+            background-color: #1e1e24;
+            color: #ffffff;
+            padding 50px;
+          }
+          input[type="range"] {
+    width: 130px;
+    cursor: pointer;
+}
+          .dek {
+            background-color: #2b2b36;
+            border: 3px solid #00ffff;
+            border-radius: 12px;
+            padding: 30px;
+            width: 180px;
+            text-align: center;
+        }
+        .slider{
+ margin-top: 20px;
+            font-size: 14px;
+        }
+        button {
+            width: 30%;
+            padding: 20px;
+            margin-top: 20px;
+            background-color: #00ffff;
+            color: #1e1e24;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+    </style>
+      
 </head>
 <body>
     <div class="dek">
@@ -18,12 +54,31 @@
     <label >Pitch/Speed:</label>
            <input type="range" id="Slide" min="0.5" max="1.5" step="0.1" value="1">
 </div>
-<audio id="audioEngine"></audio>
+<audio id="audioEngine" crossorigin="anonymous"></audio>
+<div class="slider">
+    <label>Volume:</label>
+<input type="range"  id="vol" min="0"max="1"step="0.05" value="0.8">
+    </div>  
+    <div class="slider">
+    <label>Bass (Low):</label>
+    <input type="range" id="b"
+min="-20" max="20" step="1" value="0">
+</div>
+<div class="slider">
+    <label>Treble (High):</label>
+    <input type="range" id="t" min="-20" max="20" step="1" value="0">
+</div>
 </div>
 <script>
     const selector =document.getElementById('songSelector');
     const audio =document.getElementById('audioEngine');
     const  playBtn = document.getElementById('playButton');
+    const volumeSlider = document.getElementById('vol');
+    const bassSlider = document.getElementById('b');
+    const   trebleSlider = document.getElementById('t');
+    let audioContext;
+let bassFilter;
+let trebleFilter;
     const speedSlider = document.getElementById('Slide');
      selector.addEventListener('change', function() {
 audio.src = selector.value
@@ -51,6 +106,18 @@ audio.load();  playBtn.innerText = "PLAY";
 speedSlider.addEventListener('input', function() {
     audio.playbackRate = speedSlider.value; 
 });
+
+
+function setupAudioNodes() {
+    if (audioContext) return; 
+
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const source = audioContext.createMediaElementSource(audio);
+
+    bassFilter = audioContext.createBiquadFilter;
+        bassFilter.type = 'lowshelf';
+    bassFilter.frequency.value = 200; 
+};
 </script>
 </body>
 </html>
