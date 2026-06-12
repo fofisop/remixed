@@ -1,4 +1,5 @@
 <html>
+    <center>
 <head>
     <title>Dj deck</title>
     <style>
@@ -6,12 +7,41 @@
             background-color: #1e1e24;
             color: #ffffff;
             padding: 50px;
+            
+            margin: 0;
+
           }
           input[type="range"] {
     width: 130px;
     cursor: pointer;
+          }
+          .spn{
+        border-radius: 50%;
+    height: 140px;
+        width: 140px;
+        background: radial-gradient(circle, #00ffff 6%, #111115 7%, #1a1a22 8%, #111115 15%, #22222b 16%, #050508 70%); /*I copy and pasted this line right here!!! It looked pretty on someone else's project so I borrowed this single line.*/
+    margin: 20px auto;
+    position: relative;
+    animation: spinAnimation 3s linear infinite;
+    animation-play-state: paused;
+
+          }
+          .spn::after {
+    content: '';
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 8px;
+    height: 8px;
+    background-color: #00ffff;
+    border-radius: 50%;
+    box-shadow: 0 0 6px #00ffff;
+
+
 }
           .dek {
+
             background-color: #2b2b36;
             border: 3px solid #00ffff;
             border-radius: 19px;
@@ -35,18 +65,66 @@
             cursor: pointer;
             transition: opacity 0.2s;
         }
+          .opensesameseeds {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #1e1e24;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            animation: fadeOutEffect 3s ease-in-out forwards;
+        }
+
+        .opensesameseeds img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @keyframes spinAnimation {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+        @keyframes fadeOutEffect {
+            0% {
+                opacity: 1;
+                visibility: visible;
+            }
+            70% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
     </style>
       
 </head>
 <body>
+    <div class="opensesameseeds">
+        <img src = "djplayachristmassong.png">
+
+    </div>
     <div class="dek">
-        <h2>My dj deck</h2>
+        <h2>My dj deck</h2> <div class="spn"></div>
+
       <select id="songSelector">
         <option value="">-- Select a Song --</option>
         <option value="6590745674383360.wav">Track 1</option>
         <option value = "5458802178129920.wav">Track 2</option>
         <option value = "5695671805542400.wav
 ">Track 3</option>
+<option value = "5791464071757824.wav
+">Track 4</option>
+<option value = "5560378792214528.wav
+">Track 5</option>
+
       </select>
       <button id="playButton">PLAY</button>
 <div class = "slider">
@@ -81,9 +159,11 @@ min="-20" max="20" step="1" value="0">
 let bassFilter;
 let trebleFilter;
     const speedSlider = document.getElementById('Slide');
+    const spn = document.querySelector('.spn');
+
      selector.addEventListener('change', function() {
-audio.src = selector.value
-audio.load();  playBtn.innerText = "PLAY"; 
+audio.src = selector.value;
+audio.load();  playBtn.innerText = "PLAY"; spn.style.animationPlayState = "paused";
 
      
      });
@@ -101,10 +181,12 @@ audio.load();  playBtn.innerText = "PLAY";
     }
     if (audio.paused){
         audio.play();
-         playBtn.innerText = "PAUSE"; 
+        playBtn.innerText = "PAUSE"; 
+        spn.style.animationPlayState = "running";
     }else{
          audio.pause();
             playBtn.innerText = "PLAY";
+             spn.style.animationPlayState = "paused";
     }
      });
 
@@ -149,4 +231,5 @@ bassSlider.addEventListener('input', function() {
 
 </script>
 </body>
+</center>
 </html>
